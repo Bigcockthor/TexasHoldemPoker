@@ -42,13 +42,41 @@ public class Subject {
 
     private static void JudgingEnd(Poker[][] poker) {
         RoyalFlush(poker);
+        StraightFlush(poker);
+    }
+
+    private static void StraightFlush(Poker[][] poker) {
+        int flag[]={0,0};
+        for (int i = 0; i <2 ; i++) {
+            for (int j = 0; j <3 ; j++) {
+                for (int k = 0; k <13 ; k++) {
+                    if (poker[i][j].point==sortPoker[k]&&poker[i][j+1].point==sortPoker[k+1]
+                            &&poker[i][j+2].point==sortPoker[k+2]&&poker[i][j+3].point==sortPoker[k+3]
+                            &&poker[i][j+4].point==sortPoker[k+4]&&poker[i][j].suit==poker[i][j+1].suit
+                            &&poker[i][j+1].suit==poker[i][j+2].suit&&poker[i][j+2].suit==poker[i][j+3].suit
+                            &&poker[i][j+3].suit==poker[i][j+4].suit){
+                        flag[i]=j+1;
+                    }
+                }
+            }
+        }
+        if (flag[0]!=0&&flag[1]==0){
+            System.out.println("Player 1 win!");
+            System.exit(0);
+        }
+        if (flag[0]==0&&flag[1]!=0){
+            System.out.println("Player 2 win!");
+            System.exit(0);
+        }
     }
 
     private static void RoyalFlush(Poker[][] poker) {
         int flag[]={0,0};
         for (int i = 0; i <2 ; i++) {
             if (poker[0][2].point == '0' && poker[0][3].point == 'J'
-                    && poker[0][4].point == 'Q' && poker[0][5].point == 'K' && poker[0][6].point == 'A') {
+                    && poker[0][4].point == 'Q' && poker[0][5].point == 'K' && poker[0][6].point == 'A'
+                    &&poker[0][2].suit==poker[0][3].suit&&poker[0][3].suit==poker[0][4].suit
+                    &&poker[0][4].suit==poker[0][5].suit&&poker[0][5].suit==poker[0][6].suit) {
                 flag[i]++;
             }
         }
@@ -61,15 +89,19 @@ public class Subject {
             System.exit(0);
         }
         else{
-            int num1=0,num2=0;
-            for (int i = 1; i >=0 ; i--) {
-                for (int l = 0; l < 13; l++) {
-                    if (poker[0][i].point == sortPoker[l]) {
-                        num1 = l;
-                    }
-                    if (poker[0][i].point == sortPoker[l]) {
-                        num2 = l;
-                    }
+            Draw(poker,1);
+        }
+    }
+
+    private static void Draw(Poker[][] poker, int n) {
+        int num1=0,num2=0;
+        for (int i = n; i >=0 ; i--) {
+            for (int l = 0; l < 13; l++) {
+                if (poker[0][i].point == sortPoker[l]) {
+                    num1 = l;
+                }
+                if (poker[1][i].point == sortPoker[l]) {
+                    num2 = l;
                 }
                 if (num1>num2){
                     System.out.println("Player 1 win!");
@@ -80,9 +112,9 @@ public class Subject {
                     System.exit(0);
                 }
             }
-            System.out.println("Draw!");
-            System.exit(0);
         }
+        System.out.println("Draw!");
+        System.exit(0);
     }
 
     private static void FlopTurnRiver(Poker[][] poker, Scanner mScanner) {
